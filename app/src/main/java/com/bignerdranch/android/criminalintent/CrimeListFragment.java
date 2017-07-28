@@ -31,6 +31,14 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    private void updateUI() {
+        CrimeLab crimeLab = CrimeLab.get(getActivity());
+        List<Crime> crimes = crimeLab.getCrimes();
+
+        mAdapter = new CrimeAdapter(crimes);
+        mCrimeRecyclerView.setAdapter(mAdapter);
+    }
+
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mTitleTextView;
@@ -57,19 +65,21 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
-    private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
-        List<Crime> crimes = crimeLab.getCrimes();
-
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
-    }
-
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
         private List<Crime> mCrimes;
+        private int mNormalCrime = R.layout.list_item_crime;
+        private int mPoliceCrime = R.layout.police_required_crime;
 
         public CrimeAdapter(List<Crime> crimes) {
             mCrimes = crimes;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (mCrimes.get(position).isReqPolice()) {
+                return mNormalCrime;
+            }
+            else return mPoliceCrime;
         }
 
         @Override
