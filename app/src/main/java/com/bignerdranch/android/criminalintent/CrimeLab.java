@@ -14,8 +14,8 @@ import java.util.UUID;
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
 
-    private List<Crime> mCrimes;
-    private HashMap<UUID, Integer> mIds = new HashMap<>(); // added per chapter 10 challenge
+    private List<UUID> mCrimeIds;
+    private HashMap<UUID, Crime> mCrimes = new HashMap<>(); // added per chapter 10 challenge
 
     public static CrimeLab get(Context context) {
         if (sCrimeLab == null){
@@ -24,27 +24,29 @@ public class CrimeLab {
         return sCrimeLab;
     }
     private CrimeLab(Context context) {
-        mCrimes = new ArrayList<>();
+        mCrimeIds = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Crime crime = new Crime();
             crime.setTitle("Crime #" + i);
             crime.setSolved(i % 2 == 0);
-            mIds.put(crime.getId(), i); // I added this per chapter 10 challenge
-            mCrimes.add(crime);
+            mCrimes.put(crime.getId(), crime); // I added this per chapter 10 challenge
+            mCrimeIds.add(crime.getId());
         }
     }
 
     public List<Crime> getCrimes() {
-        return mCrimes;
+        List<Crime> crimeList = new ArrayList<>();
+        for (UUID id : mCrimeIds) {
+            crimeList.add(mCrimes.get(id));
+        }
+        return crimeList;
     }
 
     public Crime getCrime(UUID id) {
-        if (mIds.get(id) == null) {
-            return null;
+        if (mCrimeIds.contains(id)) {
+            return mCrimes.get(id);
         }
-        else {
-            return mCrimes.get(mIds.get(id));
-        }
+        return null;
 //        for (Crime crime : mCrimes) {
 //            if (crime.getId().equals(id)) {
 //                return crime;
