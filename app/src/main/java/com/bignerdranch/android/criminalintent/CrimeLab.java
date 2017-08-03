@@ -54,4 +54,9 @@ public class CrimeLab {
 //        }
 //        return null;
     }
+
+    public int getPosition(UUID id) {
+        int index = mCrimeIds.indexOf(id);
+        return index;
+    }
 }
