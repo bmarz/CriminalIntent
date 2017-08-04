@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ public class CrimeFragment extends Fragment{
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mCheckBox;
 
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -56,6 +58,8 @@ public class CrimeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
+
+
 
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
@@ -88,6 +92,16 @@ public class CrimeFragment extends Fragment{
             }
         });
 
+        mTimeButton = (Button) v.findViewById(R.layout.dialog_time);
+        updateTime();
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+                TimePi
+            }
+        });
+
         mCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
         mCheckBox.setChecked(mCrime.isSolved());
         mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -114,5 +128,18 @@ public class CrimeFragment extends Fragment{
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+    private void updateTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mCrime.getDate());
+        int hour = calendar.HOUR;
+        int minute = calendar.MINUTE;
+        int am_pm = calendar.AM_PM;
+
+        String time = String.valueOf(hour) + ":" + String.valueOf(minute) + " ";
+        if (am_pm == 0) { time += "AM"; }
+        else { time += "PM"; }
+
+        mTimeButton.setText(time);
     }
 }
